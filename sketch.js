@@ -21,7 +21,7 @@ function p5ToCartesian(p5Vector){
 }
 
 function f(t, X){
-    return createVector(-X.x + X.y, 2 * X.x - X.y);
+    return createVector(X.y, - X.x);
 }
 
 function setup() {
@@ -64,6 +64,6 @@ function draw() {
 }
 
 function mousePressed(){
-    solutionPoints.push(new Solution(mouseX - zero.x, mouseY - zero.y, f));
+    solutionPoints.push(new Solution(mouseX - zero.x, mouseY - zero.y, f, false, true));
     // solutionCurves.push(new SolutionCurve(mouseX - zero.x, mouseY - zero.y, f));
 }
