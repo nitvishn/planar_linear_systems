@@ -64,6 +64,6 @@ function draw() {
 }
 
 function mousePressed(){
-    // solutionPoints.push(new Solution(mouseX - zero.x, mouseY - zero.y, f));
-    solutionCurves.push(new SolutionCurve(mouseX - zero.x, mouseY - zero.y, f));
+    solutionPoints.push(new Solution(mouseX - zero.x, mouseY - zero.y, f));
+    // solutionCurves.push(new SolutionCurve(mouseX - zero.x, mouseY - zero.y, f));
 }
