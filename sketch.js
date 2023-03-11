@@ -21,7 +21,23 @@ function p5ToCartesian(p5Vector){
 }
 
 function f(t, X){
-    return createVector(- X.y, X.x);
+    // r = sqrt(X.x*X.x + X.y*X.y);
+    // theta = Math.atan2(X.y, X.x);
+
+    var r = X.x;
+    var theta = X.y;
+
+    r_prime = r - r**3;
+    theta_prime = Math.sin(theta)**2 - 1;
+
+    // x_prime = r * Math.sin(theta) * theta_prime;
+    // y_prime = 
+
+    // return createVector(r_prime * X.x / r - X.y, r_prime * X.y / r + X.x);
+
+    console.log(r_prime, theta_prime);
+
+    return createVector(r_prime, theta_prime);
 }
 
 function setup() {
@@ -32,11 +48,23 @@ function setup() {
     zero = createVector(windowWidth/2, windowHeight/2);
 }
 
-function drawArrowAt(x, y){
-    var source = createVector(x, y);
+function convertPolarToCartesian(vec){
+    return createVector(vec.x * Math.cos(vec.y), vec.x * Math.sin(vec.y));
+}
+
+function drawArrowAt(r, theta){
+
+    var source = createVector(r, theta);
     var dest = f(0, source);
-    var v = normalisedDifferenceVector(source, dest);
-    point(x, y);
+
+    source_cartesian = convertPolarToCartesian(source);
+    dest_cartesian = convertPolarToCartesian(dest);
+
+    v = normalisedDifferenceVector(source_cartesian, dest_cartesian);
+
+    x = source_cartesian.x;
+    y = source_cartesian.y;
+
     line(x, y, x + v.x, y + v.y);
 }
 
@@ -45,26 +73,35 @@ function draw() {
     background(0);
     stroke(100);
     strokeWeight(1);
-    for(var x = -xRange; x < xRange; x+=gridSize){
-        for(var y = -yRange; y < yRange; y+=gridSize){
-            drawArrowAt(x, y);
+
+    var max_r = 1000;
+
+    for(var r = 0; r < max_r; r += 1){
+        for(var theta = 0; theta < 2 * Math.PI; theta += 0.1){
+            drawArrowAt(r, theta);
         }
     }
+
+    // for(varx = -xRange; x < xRange; x+=gridSize){
+    //     for(var y = -yRange; y < yRange; y+=gridSize){
+    //         drawArrowAt(x, y);
+    //     }
+    // }
 
     // stroke(255);
     // strokeWeight(4);
     // drawArrowAt(mouseX - zero.x, mouseY - zero.y);
     // console.log(f(0, createVector(1, 0)))
 
-    for(var i = 0; i < solutionPoints.length; i++){
-        solutionPoints[i].update(0.01);
-        solutionPoints[i].show();
-    }
+    // for(var i = 0; i < solutionPoints.length; i++){
+    //     solutionPoints[i].update(0.01);
+    //     solutionPoints[i].show();
+    // }
 
-    for(var i = 0; i < solutionCurves.length; i++){
-        solutionCurves[i].update(0.01);
-        solutionCurves[i].show();
-    }
+    // for(var i = 0; i < solutionCurves.length; i++){
+    //     solutionCurves[i].update(0.01);
+    //     solutionCurves[i].show();
+    // }
 
     strokeWeight(1);
     // draw the y axis
@@ -76,6 +113,6 @@ function draw() {
 }
 
 function mousePressed(){
-    // solutionPoints.push(new Solution(mouseX - zero.x, mouseY - zero.y, f, false, true));
-    solutionCurves.push(new SolutionCurve(mouseX - zero.x, mouseY - zero.y, f));
+    solutionPoints.push(new Solution(mouseX - zero.x, mouseY - zero.y, f, false, true));
+    // solutionCurves.push(new SolutionCurve(mouseX - zero.x, mouseY - zero.y, f));
 }
